@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements QRCodeReaderView.
     Dialog dialog;
     String selectedType = "";
     String tollID, amount1, amount2, amount;
+    SharedPreferences preferences;
     @Override
     protected  void onPause(){
         super.onPause();
@@ -64,7 +66,18 @@ public class MainActivity extends AppCompatActivity implements QRCodeReaderView.
         context = this;
         Paper.init(context);
         dialog = new Dialog(context);
+        preferences = getSharedPreferences("Tolpe", Context.MODE_PRIVATE);
         dialog.setContentView(R.layout.layout_dialog);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                try{
+                    qrcodeReader.getCameraManager().startPreview();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
         qrcodeReader = (QRCodeReaderView) findViewById(R.id.qrdecoderview);
         qrcodeReader.setOnQRCodeReadListener(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -91,7 +104,18 @@ public class MainActivity extends AppCompatActivity implements QRCodeReaderView.
           Log.d("Test", "detected " + detected);
           detected = true;
           qrcodeReader.getCameraManager().stopPreview();
-          dialog.show();
+
+         String pending = preferences.getString(tollID, "");
+          if(pending.equals(""))
+            dialog.show();
+          else{
+              Toast.makeText(context, "Payment Successful", Toast.LENGTH_SHORT).show();
+              preferences.getString(tollID, "");
+              SharedPreferences.Editor edit = preferences.edit();
+              edit.putString(tollID, "");
+              edit.commit();
+              qrcodeReader.getCameraManager().startPreview();
+          }
           payButton = (TextView) dialog.findViewById(R.id.payButton);
           RelativeLayout oneWay = (RelativeLayout) dialog.findViewById(R.id.oneWay);
           RelativeLayout twoWay = (RelativeLayout) dialog.findViewById(R.id.twoWay);
@@ -153,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements QRCodeReaderView.
 
     }
 
-    public void payMoney(String amount, String type, String tollID){
+    public void payMoney(String amount, String type, final String tollID){
         String userID = getString(R.string.user_id);
         String url = "http://10.10.30.161/pay_money.php?amount="+amount+"&user_id="+userID+"&ride_type="+type+"&toll_id="+tollID;
         JsonObjectRequest payRequest = new JsonObjectRequest(Request.Method.GET, url, (String)null,
@@ -164,6 +188,11 @@ public class MainActivity extends AppCompatActivity implements QRCodeReaderView.
                             if(response.getBoolean("status")) {
                                 Paper.book().write("balance", response.getString("balance"));
                                 Toast.makeText(context, "Payment Successful", Toast.LENGTH_SHORT).show();
+                                if(selectedType.equals("2")){
+                                    SharedPreferences.Editor edit = preferences.edit();
+                                    edit.putString(tollID, "Pending");
+                                    edit.commit();
+                                }
                             }
                             else {
                                 if(response.getString("reason").equals("low_balance")){

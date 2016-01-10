@@ -53,6 +53,6 @@
         android:id="@+id/payButton"
         android:textColor="#fff"
         android:layout_alignParentBottom="true"
-        android:background="#bdc3c7"/>
+        android:background="#C5EFF7"/>
 
 </RelativeLayout>
