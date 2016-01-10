@@ -12,5 +12,12 @@
     tools:context="com.tolpe.tolpe.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <com.dlazaro66.qrcodereaderview.QRCodeReaderView
+        android:id="@+id/qrdecoderview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"/>
 
 </RelativeLayout>

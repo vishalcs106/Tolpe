@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Tolpe</string>
+    <string name="user_id">1</string>
     <string name="action_settings">Settings</string>
 </resources>
