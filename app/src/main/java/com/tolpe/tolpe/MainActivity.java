@@ -178,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements QRCodeReaderView.
     }
 
     public void payMoney(String amount, String type, final String tollID){
-        String userID = getString(R.string.user_id);
-        String url = "http://10.10.30.161/pay_money.php?amount="+amount+"&user_id="+userID+"&ride_type="+type+"&toll_id="+tollID;
+        String userID = Paper.book().read("user_id");
+        String url = "http://10.10.21.237/pay_money.php?amount="+amount+"&user_id="+userID+"&ride_type="+type+"&toll_id="+tollID;
         JsonObjectRequest payRequest = new JsonObjectRequest(Request.Method.GET, url, (String)null,
                 new Response.Listener<JSONObject>() {
                     @Override

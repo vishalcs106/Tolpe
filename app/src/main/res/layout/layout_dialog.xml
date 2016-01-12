@@ -3,10 +3,22 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="150dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Pay"
+        android:gravity="center"
+        android:id="@+id/payButton"
+        android:textColor="#fff"
+        android:layout_alignParentBottom="true"
+        android:background="#C5EFF7"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_above="@id/payButton"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
     <RelativeLayout
@@ -45,14 +57,6 @@
         </RelativeLayout>
 
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Pay"
-        android:gravity="center"
-        android:id="@+id/payButton"
-        android:textColor="#fff"
-        android:layout_alignParentBottom="true"
-        android:background="#C5EFF7"/>
+
 
 </RelativeLayout>

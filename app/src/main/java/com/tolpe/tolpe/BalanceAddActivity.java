@@ -67,7 +67,7 @@ public class BalanceAddActivity extends Activity {
     }
 
     private void addMoney() {
-        String userID = getString(R.string.user_id);
+        String userID = Paper.book().read("user_id");
         String amount = amountEditText.getText().toString();
         if(amount.equals("")){
             Toast.makeText(context, "Enter Valid Amount", Toast.LENGTH_SHORT).show();
@@ -75,7 +75,7 @@ public class BalanceAddActivity extends Activity {
         else{
             try {
                 int amountInt = Integer.parseInt(amount);
-                String url = "http://10.10.30.161/add_money.php?amount="+amount+"&user_id="+userID;
+                String url = "http://10.10.21.237/add_money.php?amount="+amount+"&user_id="+userID;
                 JsonObjectRequest payRequest = new JsonObjectRequest(Request.Method.GET, url, (String)null,
                         new Response.Listener<JSONObject>() {
                             @Override
